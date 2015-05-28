@@ -4,6 +4,7 @@ from Service import weibo_nearby_timeline, dzdp_GetBusinessId, dzdp_GetRecentRev
 from DAO import writeWeiboData
 from DAO import conMySql
 from DAO import writeDzdpData
+
 #将解析数据写入mysql
 def weibojsontomysql():
     data= weibo_nearby_timeline.nearbytline()
@@ -13,7 +14,7 @@ def weibojsontomysql():
         weiboid=data["statuses"][i]["id"].encode('utf-8')
         #取text
         try:
-            text = data["statuses"][i]["text"]
+            text = data["statuses"][i]["text"].encode('utf-8')
         except:
             text = "unknown"
         #取经纬度
@@ -43,7 +44,7 @@ def weibojsontomysql():
         #取location
         location = data["statuses"][i]["user"]["location"]
         #取userdescription
-        decription = data["statuses"][i]["user"]["description"]
+        decription = data["statuses"][i]["user"]["description"].encode('utf-8')
         #取gender
 
         gender = data["statuses"][i]["user"]["gender"]
@@ -118,5 +119,5 @@ def dzdpbusinessreviewsToSql():
         decoration_rating = data["reviews"][i]["decoration_rating"]
         service_rating = data["reviews"][i]["service_rating"]
 
-        writeDdpData.dzdpwriteToSql(reviewsid,business_id,created_time,text_excerpt
+        writeDzdpData.dzdpwriteToSql(reviewsid,business_id,created_time,text_excerpt
                                 ,review_rating,product_rating,decoration_rating,service_rating)
