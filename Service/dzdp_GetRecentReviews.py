@@ -13,7 +13,7 @@ def get_recent_reviews():
 
     #传入参数
     poiinfolist = conMySql.getDzdpPoiInfo(conMySql.openSQL())
-    businessid = poiinfolist[2]
+    # businessid = poiinfolist[2]
     paramSet = []
     paramSet.append(("business_id", "18248918"))
 
@@ -41,7 +41,8 @@ def get_recent_reviews():
     #模拟请求
     response = urllib.urlopen(requestUrl)
     data = json.loads(response.read())
-    return data,businessid
+    print data
+    # return data,businessid
 
 
 

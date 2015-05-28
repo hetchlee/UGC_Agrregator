@@ -41,7 +41,7 @@ def find_business():
     #模拟请求
     response = urllib.urlopen(requestUrl)
     data = json.loads(response.read())
-
+    # print data
     return data
 
 

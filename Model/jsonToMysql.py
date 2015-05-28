@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'lizhen'
-from Service import weibo_nearby_timeline, dzdp_GetBusinessId, dzdp_GetRecentReviews
+from Service import weibo_nearby_timeline, dzdp_FindBusiness, dzdp_GetRecentReviews
 from DAO import writeWeiboData
 from DAO import conMySql
 from DAO import writeDzdpData
@@ -14,7 +14,10 @@ def weibojsontomysql():
         weiboid=data["statuses"][i]["id"].encode('utf-8')
         #取text
         try:
-            text = data["statuses"][i]["text"].encode('utf-8')
+            if text.startswith('http'):
+                text=''
+            else:
+                text = data["statuses"][i]["text"].encode('utf-8')
         except:
             text = "unknown"
         #取经纬度
@@ -90,19 +93,37 @@ def weibojsontomysql():
         except IndexError:
             formatted='unknow'.encode('utf-8')
 
-        #写入mysql
-        writeWeiboData.weibowriteToSql(weiboid,text,lat,lon,title,userid,location,decription,gender,timestrnew,fax,locality,formatted)
+        #写入mysql,因特殊字符写入问题，将text和description中含有特殊字符按unknown处理
+        try:
+            writeWeiboData.weibowriteToSql(weiboid,text,lat,lon,title,userid,location,decription,gender,timestrnew,fax,locality,formatted)
+        except Exception:
+            decription="unknown"
+            text = "unknown"
+            writeWeiboData.weibowriteToSql(weiboid,text,lat,lon,title,userid,location,decription,gender,timestrnew,fax,locality,formatted)
 
 
 
-#将大众点评返回json解析，获取商户ID
-def dzdpbusinessidjsontosql():
-    data = dzdp_GetBusinessId.find_business()
+#将大众点评返回json解析
+def dzdptosql():
+    data = dzdp_FindBusiness.find_business()
     dznumber = data["count"]
     for i in range(0,dznumber):
         business_id = data["businesses"][i]["business_id"]
         business_name = data["businesses"][i]["name"]
-        writeWeiboData.writeBusinessIdToSql(conMySql.openSQL(),business_name,business_id)
+        address = data["businesses"][i]["address"]
+        telephone = data["businesses"][i]["telephone"].encode('utf8')
+        categories = data["businesses"][i]["categories"][0]
+        lat = data["businesses"][i]["latitude"]
+        lon = data["businesses"][i]["longitude"]
+        avg_rating = data["businesses"][i]["avg_rating"]
+        product_grade = data["businesses"][i]["product_grade"]
+        decoration_grade = data["businesses"][i]["decoration_grade"]
+        service_grade = data["businesses"][i]["service_grade"]
+        product_score = data["businesses"][i]["product_score"]
+        decoration_score = data["businesses"][i]["decoration_score"]
+        service_score = data["businesses"][i]["service_score"]
+
+        writeDzdpData.dzdpwriteToSql(business_id,business_name,address,telephone,categories,lat,lon,avg_rating,product_grade,decoration_grade,service_grade,product_score,decoration_score,service_score)
 
 #获取大众点评商户评论
 
