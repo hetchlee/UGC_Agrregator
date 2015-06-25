@@ -9,9 +9,9 @@ if __name__=="__main__":
         # word_keywords.keywords()
         # jsonToMysql.dzdpbusinessreviewsToSql()
         #获取新浪微博数据测试
-        # jsonToMysql.weibojsontomysql()
+        jsonToMysql.weibojsontomysql()
         #获取大众点评数据测试
-        jsonToMysql.dzdptosql()
-        time.sleep(60)
+        # jsonToMysql.dzdptosql()
+        time.sleep(10)
         #获取大众点评商户id
         # jsonToMysql.dzdpbusinessidjsontosql()

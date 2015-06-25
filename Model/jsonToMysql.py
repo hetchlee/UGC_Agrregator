@@ -11,7 +11,7 @@ def weibojsontomysql():
     weibonumber = len(data["statuses"])
     for i in range(0,weibonumber):
         #取微博ID
-        weiboid=data["statuses"][i]["id"].encode('utf-8')
+        weiboid=data[ "statuses"][i]["id"].encode('utf-8')
         #取text
         try:
             if text.startswith('http'):

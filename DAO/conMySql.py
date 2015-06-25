@@ -2,6 +2,7 @@
 __author__ = 'lizhen'
 import MySQLdb
 import random
+
 dbinfo=[
     'localhost',
     'root',
@@ -32,7 +33,7 @@ def countweiboaccountnumber():
 def getweiboacount(db):
     weiboacount = []
     accountnumber = countweiboaccountnumber()[0]
-    i = random.randint(0,accountnumber-1)
+    i = random.randint(0,accountnumber)
     cursor = db.cursor()
     cursor.execute("select * from sinaweiboacount where ID=%s"%i)
     data = cursor.fetchone()
@@ -53,7 +54,7 @@ def countpoinumber():
 def getPoiInfo(db):
     poiinfolist =[]
     number = countpoinumber()[0]
-    i = random.randint(0,number-1)
+    i = random.randint(0,number)
     cursor = db.cursor()
     cursor.execute("select * from fangteinfo where ID=%s"%i)
     data = cursor.fetchone()
